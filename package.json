@@ -1,0 +1,10 @@
+{
+  "name": "ath-typescript-sdk",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "generate": "tsx scripts/generate.ts",
+    "build": "pnpm --filter @agenttrusthandshake/types build && pnpm --filter @agenttrusthandshake/client build && pnpm --filter @agenttrusthandshake/server build",
+    "test": "pnpm --filter @agenttrusthandshake/server test && pnpm --filter @agenttrusthandshake/client test"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@agenttrusthandshake/server",
+  "version": "0.1.0",
+  "description": "Server-side helpers for building ATH protocol gateways and native implementations",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agenttrusthandshake/types": "workspace:*",
+    "jose": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
+    "zod": "^3.25.0"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
