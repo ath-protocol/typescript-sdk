@@ -5,6 +5,11 @@
  */
 export { verifyAttestation, type AttestationResult, type AttestationVerifyOptions } from "./attestation.js";
 export {
+  InMemoryAgentDocCache,
+  type CachedKeyResolver,
+  type AgentDocCacheConfig,
+} from "./agent-doc-cache.js";
+export {
   type AgentRegistry,
   type RegisteredAgent,
   InMemoryAgentRegistry,
