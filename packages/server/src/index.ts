@@ -1,7 +1,7 @@
 /**
- * @agenttrusthandshake/server — Server-side helpers for building ATH gateways and native implementations.
+ * @ath-protocol/server — Server-side helpers for building ATH gateways and native implementations.
  *
- * Re-exports all protocol types from @agenttrusthandshake/types.
+ * Re-exports all protocol types from @ath-protocol/types.
  */
 export { verifyAttestation, type AttestationResult, type AttestationVerifyOptions } from "./attestation.js";
 export {
@@ -31,4 +31,4 @@ export {
   createServiceDiscoveryDocument,
   type ServiceDiscoveryConfig,
 } from "./discovery.js";
-export * from "@agenttrusthandshake/types";
+export * from "@ath-protocol/types";

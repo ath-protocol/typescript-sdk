@@ -1,5 +1,5 @@
 {
-  "name": "@agenttrusthandshake/types",
+  "name": "@ath-protocol/types",
   "version": "0.1.0",
   "description": "Protocol types for the Agent Trust Handshake (ATH) protocol — auto-generated from the ATH JSON Schema",
   "type": "module",

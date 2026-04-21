@@ -2,7 +2,7 @@
  * ATHNativeClient — client for ATH native mode.
  * Connects directly to a service that implements ATH endpoints natively.
  */
-import type { ServiceDiscoveryDocument } from "@agenttrusthandshake/types";
+import type { ServiceDiscoveryDocument } from "@ath-protocol/types";
 import { ATHClientBase } from "./base.js";
 import { ATHClientError } from "./errors.js";
 

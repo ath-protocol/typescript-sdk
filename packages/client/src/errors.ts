@@ -1,7 +1,7 @@
 /**
  * Client-side error class for ATH protocol errors.
  */
-import type { ATHErrorCode } from "@agenttrusthandshake/types";
+import type { ATHErrorCode } from "@ath-protocol/types";
 
 export class ATHClientError extends Error {
   constructor(

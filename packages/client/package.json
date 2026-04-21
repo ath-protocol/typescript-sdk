@@ -1,7 +1,7 @@
 {
-  "name": "@agenttrusthandshake/client",
+  "name": "@ath-protocol/client",
   "version": "0.1.0",
-  "description": "TypeScript client for the Agent Trust Handshake (ATH) protocol",
+  "description": "TypeScript client for the Agent Trust Handshake (ATH) protocol — gateway and native mode",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,15 +11,12 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
-    "build": "tsc",
-    "test": "vitest run"
+    "build": "tsc"
   },
   "dependencies": {
-    "@agenttrusthandshake/types": "workspace:*",
+    "@ath-protocol/types": "workspace:*",
     "jose": "^6.0.0"
   },
   "devDependencies": {
@@ -30,19 +27,11 @@
     "vitest": "^3.0.0",
     "zod": "^3.25.0"
   },
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/A7um/ATH.git"
+    "url": "https://github.com/ath-protocol/typescript-sdk.git"
   },
-  "keywords": [
-    "ath",
-    "agent",
-    "oauth",
-    "trust",
-    "handshake"
-  ]
+  "keywords": ["ath", "agent", "oauth", "trust", "handshake"]
 }

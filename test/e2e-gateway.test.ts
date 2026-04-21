@@ -1,7 +1,7 @@
 /**
  * E2E Test: ATHGatewayClient — self-contained, no external repo imports.
  *
- * Builds a gateway-like service using @agenttrusthandshake/server handlers,
+ * Builds a gateway-like service using @ath-protocol/server handlers,
  * backed by the SDK's own mock OAuth server. Real HTTP, real PKCE.
  */
 import { describe, it, expect, beforeAll, afterAll } from "vitest";

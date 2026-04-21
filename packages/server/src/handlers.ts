@@ -1,6 +1,7 @@
 /**
- * Framework-agnostic ATH endpoint handlers for native mode.
- * Uses openid-client for OAuth 2.0 with PKCE (RFC 7636).
+ * Framework-agnostic ATH endpoint handlers.
+ * Implements register, authorize, callback, token, and revoke for both
+ * gateway and native mode. Uses openid-client for OAuth 2.0 with PKCE (RFC 7636).
  */
 import * as oidc from "openid-client";
 import crypto from "node:crypto";
@@ -12,7 +13,7 @@ import type {
   TokenExchangeRequest,
   TokenResponse,
   TokenRevocationRequest,
-} from "@agenttrusthandshake/types";
+} from "@ath-protocol/types";
 import { verifyAttestation } from "./attestation.js";
 import type { AgentRegistry, RegisteredAgent } from "./registry.js";
 import { generateCredentials, hashSecret } from "./registry.js";

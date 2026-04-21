@@ -3,13 +3,13 @@
  * Basic ATH client example — demonstrates the full trusted handshake flow.
  *
  * Prerequisites:
- *   pnpm --filter gateway dev     # start the gateway in mock mode
+ *   Start an ATH gateway (e.g. the reference implementation from the ATH repo)
  *
  * Run:
- *   npx tsx typescript-sdk/examples/client-basic.ts
+ *   npx tsx examples/client-basic.ts
  */
 import { generateKeyPair } from "jose";
-import { ATHClient } from "@agenttrusthandshake/client";
+import { ATHGatewayClient } from "@ath-protocol/client";
 
 const GATEWAY_URL = process.env.ATH_GATEWAY_URL || "http://localhost:3000";
 
@@ -18,8 +18,8 @@ async function main() {
 
   const { privateKey } = await generateKeyPair("ES256");
 
-  const client = new ATHClient({
-    gatewayUrl: GATEWAY_URL,
+  const client = new ATHGatewayClient({
+    url: GATEWAY_URL,
     agentId: "https://example-agent.example.com/.well-known/agent.json",
     privateKey,
     keyId: "example-key-1",

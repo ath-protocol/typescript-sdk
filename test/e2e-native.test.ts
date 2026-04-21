@@ -3,7 +3,7 @@
  *
  * Starts:
  *  - Mock OAuth2 server on port 16000 (real PKCE, real token exchange)
- *  - Native ATH service on port 16001 (built with @agenttrusthandshake/server handlers)
+ *  - Native ATH service on port 16001 (built with @ath-protocol/server handlers)
  *
  * Full coverage: discover → register → authorize → consent → token → api → revoke + errors.
  * No mock fetch — real HTTP only.

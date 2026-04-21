@@ -3,7 +3,7 @@
  *
  * Tracks registered agents, their approved providers/scopes, and credentials.
  */
-import type { AgentStatus, ProviderApproval, DeveloperInfo } from "@agenttrusthandshake/types";
+import type { AgentStatus, ProviderApproval, DeveloperInfo } from "@ath-protocol/types";
 import crypto from "node:crypto";
 
 export interface RegisteredAgent {

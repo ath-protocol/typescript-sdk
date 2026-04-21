@@ -2,7 +2,7 @@
  * Service discovery document builder for ATH native mode.
  * Produces a valid /.well-known/ath-app.json document.
  */
-import type { ServiceDiscoveryDocument } from "@agenttrusthandshake/types";
+import type { ServiceDiscoveryDocument } from "@ath-protocol/types";
 
 export interface ServiceDiscoveryConfig {
   ath_version?: string;

@@ -1,5 +1,5 @@
 {
-  "name": "@agenttrusthandshake/server",
+  "name": "@ath-protocol/server",
   "version": "0.1.0",
   "description": "Server-side helpers for building ATH protocol gateways and native implementations",
   "type": "module",
@@ -19,7 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@agenttrusthandshake/types": "workspace:*",
+    "@ath-protocol/types": "workspace:*",
     "jose": "^6.0.0",
     "openid-client": "^6.8.3"
   },
@@ -32,5 +32,9 @@
   "engines": {
     "node": ">=18"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ath-protocol/typescript-sdk.git"
+  }
 }

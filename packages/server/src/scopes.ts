@@ -3,7 +3,7 @@
  *
  * Effective Scope = Agent Approved ∩ User Consented ∩ Requested
  */
-import type { ScopeIntersection } from "@agenttrusthandshake/types";
+import type { ScopeIntersection } from "@ath-protocol/types";
 
 export interface ScopeIntersectionResult extends ScopeIntersection {
   requested: string[];

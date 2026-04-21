@@ -2,7 +2,7 @@
  * ATHGatewayClient — client for ATH gateway mode.
  * Connects to an ATH gateway that proxies requests to upstream service providers.
  */
-import type { DiscoveryDocument } from "@agenttrusthandshake/types";
+import type { DiscoveryDocument } from "@ath-protocol/types";
 import { ATHClientBase } from "./base.js";
 import { ATHClientError } from "./errors.js";
 

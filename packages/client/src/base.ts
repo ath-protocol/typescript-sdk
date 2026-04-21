@@ -8,7 +8,7 @@ import type {
   TokenResponse,
   DeveloperInfo,
   ProviderScopeRequest,
-} from "@agenttrusthandshake/types";
+} from "@ath-protocol/types";
 import { signAttestation, type KeyInput } from "./attestation.js";
 import { ATHClientError } from "./errors.js";
 
