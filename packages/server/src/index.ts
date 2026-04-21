@@ -19,4 +19,16 @@ export {
   type SessionStatus,
   InMemorySessionStore,
 } from "./sessions.js";
+export {
+  createATHHandlers,
+  type ATHHandlers,
+  type ATHHandlerConfig,
+  type ATHHandlerDeps,
+  type ATHHandlerRequest,
+  type ATHHandlerResponse,
+} from "./handlers.js";
+export {
+  createServiceDiscoveryDocument,
+  type ServiceDiscoveryConfig,
+} from "./discovery.js";
 export * from "@agenttrusthandshake/types";

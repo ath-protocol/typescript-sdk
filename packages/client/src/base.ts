@@ -1,8 +1,8 @@
 /**
- * ATHClient — HTTP client for the ATH protocol.
+ * ATHClientBase — abstract base class for ATH protocol clients.
+ * Shared logic for gateway mode and native mode.
  */
 import type {
-  DiscoveryDocument,
   AgentRegistrationResponse,
   AuthorizationResponse,
   TokenResponse,
@@ -13,46 +13,45 @@ import { signAttestation, type KeyInput } from "./attestation.js";
 import { ATHClientError } from "./errors.js";
 
 export interface ATHClientConfig {
-  gatewayUrl: string;
+  url: string;
   agentId: string;
   privateKey: KeyInput;
   keyId?: string;
 }
 
-export class ATHClient {
-  private gatewayUrl: string;
-  private agentId: string;
-  private privateKey: KeyInput;
-  private keyId: string;
+export abstract class ATHClientBase {
+  protected url: string;
+  protected agentId: string;
+  protected privateKey: KeyInput;
+  protected keyId: string;
 
-  private clientId?: string;
-  private clientSecret?: string;
-  private currentToken?: string;
+  protected clientId?: string;
+  protected clientSecret?: string;
+  protected currentToken?: string;
 
   constructor(config: ATHClientConfig) {
-    this.gatewayUrl = config.gatewayUrl.replace(/\/$/, "");
+    this.url = config.url.replace(/\/$/, "");
     this.agentId = config.agentId;
     this.privateKey = config.privateKey;
     this.keyId = config.keyId || "default";
   }
 
-  private async attest(audience?: string): Promise<string> {
+  protected async attest(audience?: string): Promise<string> {
     return signAttestation({
       agentId: this.agentId,
       privateKey: this.privateKey,
       keyId: this.keyId,
-      audience: audience || this.gatewayUrl,
+      audience: audience || this.url,
     });
   }
 
-  private async request<T>(
+  protected async request<T>(
     method: string,
-    path: string,
+    fullUrl: string,
     body?: unknown,
     headers?: Record<string, string>,
   ): Promise<T> {
-    const url = `${this.gatewayUrl}${path}`;
-    const res = await fetch(url, {
+    const res = await fetch(fullUrl, {
       method,
       headers: { "Content-Type": "application/json", ...headers },
       body: body ? JSON.stringify(body) : undefined,
@@ -80,9 +79,11 @@ export class ATHClient {
     return data;
   }
 
-  async discover(): Promise<DiscoveryDocument> {
-    return this.request<DiscoveryDocument>("GET", "/.well-known/ath.json");
+  protected athUrl(path: string): string {
+    return `${this.url}${path}`;
   }
+
+  abstract discover(): Promise<unknown>;
 
   async register(options: {
     developer: DeveloperInfo;
@@ -92,13 +93,13 @@ export class ATHClient {
   }): Promise<AgentRegistrationResponse> {
     const attestation = await this.attest();
 
-    const res = await this.request<AgentRegistrationResponse>("POST", "/ath/agents/register", {
+    const res = await this.request<AgentRegistrationResponse>("POST", this.athUrl("/ath/agents/register"), {
       agent_id: this.agentId,
       agent_attestation: attestation,
       developer: options.developer,
       requested_providers: options.providers,
       purpose: options.purpose,
-      redirect_uris: options.redirectUris || [`${this.gatewayUrl}/ath/callback`],
+      redirect_uris: options.redirectUris || [`${this.url}/ath/callback`],
     });
 
     this.clientId = res.client_id;
@@ -119,12 +120,12 @@ export class ATHClient {
     const attestation = await this.attest();
     const state = crypto.randomUUID();
 
-    return this.request<AuthorizationResponse>("POST", "/ath/authorize", {
+    return this.request<AuthorizationResponse>("POST", this.athUrl("/ath/authorize"), {
       client_id: this.clientId,
       agent_attestation: attestation,
       provider_id: provider,
       scopes,
-      user_redirect_uri: options?.redirectUri || `${this.gatewayUrl}/ath/callback`,
+      user_redirect_uri: options?.redirectUri || `${this.url}/ath/callback`,
       state,
       resource: options?.resource,
     });
@@ -135,7 +136,7 @@ export class ATHClient {
       throw new ATHClientError("NOT_REGISTERED", "Agent not registered. Call register() first.");
     }
 
-    const res = await this.request<TokenResponse>("POST", "/ath/token", {
+    const res = await this.request<TokenResponse>("POST", this.athUrl("/ath/token"), {
       grant_type: "authorization_code",
       client_id: this.clientId,
       client_secret: this.clientSecret,
@@ -147,26 +148,10 @@ export class ATHClient {
     return res;
   }
 
-  async proxy<T = unknown>(
-    provider: string,
-    method: string,
-    path: string,
-    body?: unknown,
-  ): Promise<T> {
-    if (!this.currentToken) {
-      throw new ATHClientError("NO_TOKEN", "No active token. Complete authorization flow first.");
-    }
-
-    return this.request<T>(method, `/ath/proxy/${provider}${path}`, body, {
-      Authorization: `Bearer ${this.currentToken}`,
-      "X-ATH-Agent-ID": this.agentId,
-    });
-  }
-
   async revoke(): Promise<void> {
     if (!this.currentToken || !this.clientId) return;
 
-    await this.request("POST", "/ath/revoke", {
+    await this.request("POST", this.athUrl("/ath/revoke"), {
       client_id: this.clientId,
       token: this.currentToken,
     });

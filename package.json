@@ -5,6 +5,8 @@
   "scripts": {
     "generate": "tsx scripts/generate.ts",
     "build": "pnpm --filter @agenttrusthandshake/types build && pnpm --filter @agenttrusthandshake/client build && pnpm --filter @agenttrusthandshake/server build",
-    "test": "pnpm --filter @agenttrusthandshake/server test && pnpm --filter @agenttrusthandshake/client test"
+    "test": "pnpm --filter @agenttrusthandshake/server test",
+    "test:e2e": "pnpm --filter @agenttrusthandshake/client exec vitest run --config ../../test/vitest.config.ts --dir ../../test",
+    "test:all": "pnpm run test && pnpm run test:e2e"
   }
 }
