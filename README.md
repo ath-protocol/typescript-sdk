@@ -97,22 +97,32 @@ const token = await client.exchangeToken(code, auth.ath_session_id);
 const messages = await client.api("GET", "/v1/messages");
 ```
 
-### Server — build a native ATH service
+### Server — build a gateway or native ATH service
+
+Both deployment modes use the same handler builders. The difference is only whether you also mount the proxy endpoint (gateway) or your own API (native).
 
 ```typescript
 import {
   createATHHandlers,
+  createProxyHandler,
   createServiceDiscoveryDocument,
   InMemoryAgentRegistry,
   InMemoryTokenStore,
   InMemorySessionStore,
+  InMemoryProviderTokenStore,
 } from "@ath-protocol/server";
 
-// Create handlers for all ATH endpoints (uses openid-client for OAuth + PKCE)
+// Shared stores — pass the SAME providerTokenStore to both builders so the
+// proxy can read the upstream tokens your handlers obtain during /ath/callback.
+const registry = new InMemoryAgentRegistry();
+const tokenStore = new InMemoryTokenStore();
+const sessionStore = new InMemorySessionStore();
+const providerTokenStore = new InMemoryProviderTokenStore();
+
+// ATH protocol endpoints: /ath/agents/register, /ath/authorize,
+// /ath/callback, /ath/token, /ath/revoke. Uses openid-client for PKCE S256.
 const handlers = createATHHandlers({
-  registry: new InMemoryAgentRegistry(),
-  tokenStore: new InMemoryTokenStore(),
-  sessionStore: new InMemorySessionStore(),
+  registry, tokenStore, sessionStore, providerTokenStore,
   config: {
     audience: "https://mail.example.com",
     callbackUrl: "https://mail.example.com/ath/callback",
@@ -127,10 +137,27 @@ const handlers = createATHHandlers({
   },
 });
 
-// Wire handlers into your framework (Hono, Express, Fastify, etc.)
-// handlers.register, handlers.authorize, handlers.callback, handlers.token, handlers.revoke
+// Gateway mode only: ANY /ath/proxy/{provider_id}/{path}
+// Validates the ATH token, swaps in the stored provider OAuth bearer,
+// and forwards to the upstream. The agent's ATH token is never leaked upstream.
+const proxy = createProxyHandler({
+  tokenStore,
+  providerTokenStore,
+  upstreams: { "com.example.mail": "https://api.example.com" },
+});
 
-// Serve discovery document
+// Wire handlers + proxy into your framework (Hono, Express, Fastify, etc.)
+//   POST /ath/agents/register → handlers.register
+//   POST /ath/authorize       → handlers.authorize
+//   GET  /ath/callback        → handlers.callback
+//   POST /ath/token           → handlers.token
+//   POST /ath/revoke          → handlers.revoke
+//   ANY  /ath/proxy/:provider/*  → proxy  (gateway mode only)
+
+// For native mode, skip createProxyHandler and instead guard your own API
+// routes with validateToken() to check the ATH bearer before serving.
+
+// Serve discovery document (native mode)
 const discoveryDoc = createServiceDiscoveryDocument({
   app_id: "com.example.mail",
   name: "Example Mail",
