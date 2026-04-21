@@ -20,6 +20,7 @@ import { generateCredentials, hashSecret } from "./registry.js";
 import { intersectScopes } from "./scopes.js";
 import type { TokenStore } from "./tokens.js";
 import type { SessionStore } from "./sessions.js";
+import { InMemoryProviderTokenStore, type ProviderTokenStore } from "./provider-tokens.js";
 
 export interface ATHHandlerRequest {
   method: string;
@@ -59,6 +60,12 @@ export interface ATHHandlerDeps {
   registry: AgentRegistry;
   tokenStore: TokenStore;
   sessionStore: SessionStore;
+  /**
+   * Storage for upstream OAuth tokens. Optional for backwards compatibility —
+   * defaults to `InMemoryProviderTokenStore`. Pass an injected store to share
+   * provider tokens with `createProxyHandler` or across server replicas.
+   */
+  providerTokenStore?: ProviderTokenStore;
   config: ATHHandlerConfig;
 }
 
@@ -90,10 +97,9 @@ export interface ATHHandlers {
 
 export function createATHHandlers(deps: ATHHandlerDeps): ATHHandlers {
   const { registry, tokenStore, sessionStore, config } = deps;
+  const providerTokenStore = deps.providerTokenStore ?? new InMemoryProviderTokenStore();
   const tokenExpiry = config.tokenExpirySeconds || 3600;
   const sessionExpiry = config.sessionExpirySeconds || 600;
-
-  const providerTokens = new Map<string, { access_token: string; refresh_token?: string }>();
 
   return {
     async register(req): Promise<ATHHandlerResponse> {
@@ -244,9 +250,10 @@ export function createATHHandlers(deps: ATHHandlerDeps): ATHHandlers {
         });
 
         const connectionId = `native_${crypto.randomBytes(8).toString("hex")}`;
-        providerTokens.set(connectionId, {
+        await providerTokenStore.set(connectionId, {
           access_token: tokens.access_token,
           refresh_token: tokens.refresh_token,
+          scope: tokens.scope,
         });
 
         const consentedScopes = tokens.scope
