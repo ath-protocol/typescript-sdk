@@ -3,7 +3,7 @@
  *
  * Re-exports all protocol types from @ath-protocol/types.
  */
-export { verifyAttestation, type AttestationResult, type AttestationVerifyOptions } from "./attestation.js";
+export { verifyAttestation, type AttestationResult, type AttestationVerifyOptions, type JtiReplayCache, InMemoryJtiCache } from "./attestation.js";
 export {
   type AgentRegistry,
   type RegisteredAgent,
