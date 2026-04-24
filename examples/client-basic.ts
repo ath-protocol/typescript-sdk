@@ -42,30 +42,28 @@ async function main() {
   console.log(`   Status: ${reg.agent_status}`);
   console.log(`   Approved: ${reg.approved_providers[0].approved_scopes.join(", ")}\n`);
 
-  // 3. Authorize
+  // 3. Authorize (state is now required — the SDK generates it automatically)
   console.log("3. Starting authorization...");
   const auth = await client.authorize("github", ["repo", "read:user"]);
   console.log(`   Session: ${auth.ath_session_id}`);
   console.log(`   User should visit: ${auth.authorization_url}\n`);
 
-  // 4. Simulate consent (mock mode only)
-  console.log("4. Simulating user consent (mock mode)...");
+  // 4. Simulate consent
+  // In production, the user visits authorization_url in their browser.
+  // For testing with a mock OAuth server that supports ?auto_approve=true:
+  console.log("4. Simulating user consent...");
   const consentUrl = new URL(auth.authorization_url);
-  const approveRes = await fetch(`${GATEWAY_URL}/ui/mock-consent/approve`, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      callback: consentUrl.searchParams.get("callback") || "",
-      state: consentUrl.searchParams.get("state") || "",
-      provider: consentUrl.searchParams.get("provider") || "",
-    }),
-    redirect: "manual",
-  });
-  const redirectLocation = approveRes.headers.get("location") || "";
-  await fetch(redirectLocation, { redirect: "manual" });
-  console.log("   Consent simulated.\n");
+  consentUrl.searchParams.set("auto_approve", "true");
+  const oauthRes = await fetch(consentUrl.toString(), { redirect: "manual" });
+  if (oauthRes.status === 302) {
+    const callbackUrl = oauthRes.headers.get("location") || "";
+    await fetch(callbackUrl, { redirect: "manual" });
+    console.log("   Consent completed.\n");
+  } else {
+    console.log("   Auto-approve not available. In production, user consents via browser.\n");
+  }
 
-  // 5. Exchange token
+  // 5. Exchange token (now includes agent_attestation for identity proof)
   console.log("5. Exchanging token...");
   const tokenRes = await client.exchangeToken("mock_code", auth.ath_session_id);
   console.log(`   Token type: ${tokenRes.token_type}`);
@@ -77,7 +75,7 @@ async function main() {
   const apiRes = await client.proxy<Record<string, unknown>>("github", "GET", "/user");
   console.log(`   Response:`, JSON.stringify(apiRes, null, 2), "\n");
 
-  // 7. Revoke
+  // 7. Revoke (now sends client_secret for authentication per RFC 7009)
   console.log("7. Revoking token...");
   await client.revoke();
   console.log("   Done.\n");
