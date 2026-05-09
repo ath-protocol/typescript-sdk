@@ -11,6 +11,6 @@
     "version:patch": "pnpm --filter \"@ath-protocol/*\" exec -- npm version patch --no-git-tag-version",
     "version:minor": "pnpm --filter \"@ath-protocol/*\" exec -- npm version minor --no-git-tag-version",
     "version:major": "pnpm --filter \"@ath-protocol/*\" exec -- npm version major --no-git-tag-version",
-    "publish:all": "pnpm run build && pnpm --filter @ath-protocol/types publish --access public --no-git-checks && pnpm --filter @ath-protocol/client publish --access public --no-git-checks && pnpm --filter @ath-protocol/server publish --access public --no-git-checks"
+    "release": "node scripts/release.js"
   }
 }
