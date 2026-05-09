@@ -1,6 +1,6 @@
 {
   "name": "@ath-protocol/client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript client for the Agent Trust Handshake (ATH) protocol — gateway and native mode",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,7 +11,9 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "tsc"
@@ -31,12 +33,20 @@
     "vitest": "^3.0.0",
     "zod": "^3.25.0"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ath-protocol/typescript-sdk.git",
     "directory": "packages/client"
   },
-  "keywords": ["ath", "agent", "oauth", "trust", "handshake"]
+  "keywords": [
+    "ath",
+    "agent",
+    "oauth",
+    "trust",
+    "handshake"
+  ]
 }

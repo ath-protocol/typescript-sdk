@@ -1,6 +1,6 @@
 {
   "name": "@ath-protocol/types",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Protocol types for the Agent Trust Handshake (ATH) protocol — auto-generated from the ATH JSON Schema",
   "type": "module",
   "main": "./dist/index.js",
@@ -12,7 +12,9 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "generate": "tsx ../../scripts/generate.ts",
@@ -30,12 +32,22 @@
     "typescript": "^5.7.0",
     "zod": "^3.25.0"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ath-protocol/typescript-sdk.git",
     "directory": "packages/types"
   },
-  "keywords": ["ath", "agent", "oauth", "trust", "handshake", "protocol", "types"]
+  "keywords": [
+    "ath",
+    "agent",
+    "oauth",
+    "trust",
+    "handshake",
+    "protocol",
+    "types"
+  ]
 }
