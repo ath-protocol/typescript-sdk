@@ -15,7 +15,11 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "generate": "tsx ../../scripts/generate.ts"
+    "generate": "tsx ../../scripts/generate.ts",
+    "prepublishOnly": "tsc"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "zod": "^3.25.0 || ^4.0.0"
@@ -27,5 +31,11 @@
     "zod": "^3.25.0"
   },
   "engines": { "node": ">=18" },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ath-protocol/typescript-sdk.git",
+    "directory": "packages/types"
+  },
+  "keywords": ["ath", "agent", "oauth", "trust", "handshake", "protocol", "types"]
 }

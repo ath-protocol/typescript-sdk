@@ -7,6 +7,10 @@
     "build": "pnpm --filter @ath-protocol/types build && pnpm --filter @ath-protocol/client build && pnpm --filter @ath-protocol/server build",
     "test": "pnpm --filter @ath-protocol/server test",
     "test:e2e": "pnpm --filter @ath-protocol/client exec vitest run --config ../../test/vitest.config.ts --dir ../../test",
-    "test:all": "pnpm run test && pnpm run test:e2e"
+    "test:all": "pnpm run test && pnpm run test:e2e",
+    "version:patch": "pnpm --filter \"@ath-protocol/*\" exec -- npm version patch --no-git-tag-version",
+    "version:minor": "pnpm --filter \"@ath-protocol/*\" exec -- npm version minor --no-git-tag-version",
+    "version:major": "pnpm --filter \"@ath-protocol/*\" exec -- npm version major --no-git-tag-version",
+    "publish:all": "pnpm run build && pnpm --filter @ath-protocol/types publish --access public --no-git-checks && pnpm --filter @ath-protocol/client publish --access public --no-git-checks && pnpm --filter @ath-protocol/server publish --access public --no-git-checks"
   }
 }

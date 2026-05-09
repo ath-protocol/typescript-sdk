@@ -13,7 +13,11 @@
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "tsc"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@ath-protocol/types": "workspace:*",
@@ -31,7 +35,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ath-protocol/typescript-sdk.git"
+    "url": "https://github.com/ath-protocol/typescript-sdk.git",
+    "directory": "packages/client"
   },
   "keywords": ["ath", "agent", "oauth", "trust", "handshake"]
 }
