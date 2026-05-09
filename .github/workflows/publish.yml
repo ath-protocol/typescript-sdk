@@ -5,9 +5,14 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: npm
     steps:
       - uses: actions/checkout@v4
 
@@ -24,16 +29,16 @@ jobs:
       - run: pnpm run build
 
       - name: Publish @ath-protocol/types
-        run: pnpm publish --filter @ath-protocol/types --access public --no-git-checks
+        run: pnpm publish --filter @ath-protocol/types --access public --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @ath-protocol/client
-        run: pnpm publish --filter @ath-protocol/client --access public --no-git-checks
+        run: pnpm publish --filter @ath-protocol/client --access public --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @ath-protocol/server
-        run: pnpm publish --filter @ath-protocol/server --access public --no-git-checks
+        run: pnpm publish --filter @ath-protocol/server --access public --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
