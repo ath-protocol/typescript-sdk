@@ -26,4 +26,8 @@ jobs:
 
       - run: pnpm run build
 
-      - run: pnpm run test:all
+      - run: pnpm run test
+
+      - name: Run e2e tests
+        if: matrix.node-version != 18
+        run: pnpm run test:e2e

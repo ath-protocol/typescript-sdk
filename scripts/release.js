@@ -25,8 +25,9 @@ console.log(`\nReleasing ${tag}\n`);
 
 run("git add -A");
 run(`git commit -m "release: ${tag}"`);
-run(`git tag ${tag}`);
-run("git push origin main --follow-tags");
+run(`git tag -a ${tag} -m "release: ${tag}"`);
+run("git push origin main");
+run(`git push origin ${tag}`);
 
 console.log(
   `\nDone — pushed ${tag}. GitHub Actions will publish to NPM automatically.`,
