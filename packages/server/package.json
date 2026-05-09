@@ -1,6 +1,6 @@
 {
   "name": "@ath-protocol/server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Server-side helpers for building ATH protocol gateways and native implementations",
   "type": "module",
   "main": "./dist/index.js",
