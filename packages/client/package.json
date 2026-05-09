@@ -1,6 +1,6 @@
 {
   "name": "@ath-protocol/client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript client for the Agent Trust Handshake (ATH) protocol — gateway and native mode",
   "type": "module",
   "main": "./dist/index.js",
